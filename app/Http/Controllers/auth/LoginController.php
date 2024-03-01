@@ -12,7 +12,7 @@ class LoginController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function loginn(Request $request)
     {
         // Validate the form data
         $credentials = $request->validate([
@@ -26,5 +26,12 @@ class LoginController extends Controller
         } else {
             return back()->withErrors(['email' => 'Invalid credentials']);
         }
+    }
+
+
+
+    public function login(){
+        $user = User::where('email', $request->email)->first();
+
     }
 }
