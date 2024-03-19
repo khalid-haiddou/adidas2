@@ -1,70 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Login or Register</title>
-    <style>
-        .gradient-custom {
-            background: #6a11cb;
-            background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
-            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Registration or Sign Up form in HTML CSS | CodingLab</title>
+  <link rel="stylesheet" href="/css/registerstyle.css">
 </head>
+
 <body>
-<section class="vh-100 gradient-custom">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                    <div class="card-body p-5 text-center">
 
-                        <div class="mb-md-5 mt-md-4 pb-5">
-                            <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
-                            <p class="text-white-50 mb-5">Please enter your details to register!</p>
-                            <form method="POST" action="{{ route('register') }}">
-                                @csrf
-khkj
-                                <div class="form-outline form-white mb-4">
-                                    <input type="text" id="name" name="name" class="form-control form-control-lg" />
-                                    <label class="form-label" for="name">Name</label>
-                                </div>
+  <div class="wrapper">
+    <h2>Registration</h2>
+    <form method="POST" action="/registerpost">
+    @csrf
+      <div class="input-box">
+        <input type="text" name="name" placeholder="Enter your name" required>
+      </div>
+      <div class="input-box">
+        <input type="text" name="email" placeholder="Enter your email" required>
+      </div>
+      <div class="input-box">
+        <input type="password" name="password" placeholder="Create password" required>
+      </div>
+      <div class="input-box button">
+        <input type="submit" value="Register Now">
+      </div>
+      <div class="text">
+        <h3>Already have an account? <a href="/login">Login now</a></h3>
+      </div>
+    </form>
+  </div>
 
-                                <div class="form-outline form-white mb-4">
-                                    <input type="email" id="email" name="email" class="form-control form-control-lg" />
-                                    <label class="form-label" for="email">Email</label>
-                                </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 
-                                <div class="form-outline form-white mb-4">
-                                    <input type="password" id="password" name="password" class="form-control form-control-lg" />
-                                    <label class="form-label" for="password">Password</label>
-                                </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Register</button>
-
-                            </form>
-
-                            <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
-
-                            <div class="d-flex justify-content-center text-center mt-4 pt-1">
-                                <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
-                                <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
-                                <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
-                            </div>
-
-                        </div>
-
-                        <div>
-                            <p class="mb-0">Already have an account? <a href="/login" class="text-white-50 fw-bold">Login</a></p>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 </body>
+
 </html>

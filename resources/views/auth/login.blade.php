@@ -1,80 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Login or Register</title>
-    <style>
-        .gradient-custom {
-            background: #6a11cb;
-            background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
-            background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form | CodingLab</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/loginstyle.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+
 </head>
 <body>
-<section class="vh-100 gradient-custom">
-    <div class="container py-5 h-100">
-        <div class="row d-flex justify-content-center align-items-center h-100">
-            <div class="col-12 col-md-8 col-lg-6 col-xl-5">
-                <div class="card bg-dark text-white" style="border-radius: 1rem;">
-                    <div class="card-body p-5 text-center">
-
-                        <div class="mb-md-5 mt-md-4 pb-5">
-                            @if(Request::is('login'))
-                                <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-                                <p class="text-white-50 mb-5">Please enter your login and password!</p>
-                                <form method="POST" action="{{ route('login') }}">
-                            @elseif(Request::is('register'))
-                                <h2 class="fw-bold mb-2 text-uppercase">Register</h2>
-                                <p class="text-white-50 mb-5">Please enter your details to register!</p>
-                                <form method="POST" action="{{ route('register') }}">
-                            @endif
-
-                            @csrf
-
-                            <div class="form-outline form-white mb-4">
-                                <input type="email" id="email" name="email" class="form-control form-control-lg" />
-                                <label class="form-label" for="email">Email</label>
-                            </div>
-
-                            <div class="form-outline form-white mb-4">
-                                <input type="password" id="password" name="password" class="form-control form-control-lg" />
-                                <label class="form-label" for="password">Password</label>
-                            </div>
-
-                            @if(Request::is('login'))
-                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-                            @elseif(Request::is('register'))
-                                <button class="btn btn-outline-light btn-lg px-5" type="submit">Register</button>
-                            @endif
-
-                            </form>
-
-                            <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
-
-                            <div class="d-flex justify-content-center text-center mt-4 pt-1">
-                                <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
-                                <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
-                                <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
-                            </div>
-
-                        </div>
-
-                        <div>
-                            @if(Request::is('login'))
-                                <p class="mb-0">Don't have an account? <a href="/register" class="text-white-50 fw-bold">Sign Up</a></p>
-                            @elseif(Request::is('register'))
-                                <p class="mb-0">Already have an account? <a href="/login" class="text-white-50 fw-bold">Login</a></p>
-                            @endif
-                        </div>
-
-                    </div>
-                </div>
-            </div>
+   <br>
+    @if ($message = Session::get('error'))
+   <div class="alert alert-danger" role="alert">
+    {{$message}}
+   </div>
+   @endif
+ 
+  <div class="container">
+   <div class="loginForm">
+     <img src="img\10282-Block-Standard-3.jpeg" alt="" style="width: 439px;">
+    <div class="wrapper">
+   
+     
+         <form action="/loginpost" method="POST" style="width: 31vw;">
+        @csrf
+        <div class="row">
+          <i class="fas fa-user"></i>
+          <input type="email" name="email" placeholder="Email" required>
         </div>
+        <div class="row">
+          <i class="fas fa-lock"></i>
+          <input type="password" name="password" placeholder="Password" required>
+        </div>
+        <div class="pass"><a href="/forgetpassword">Forgot password?</a></div>
+        <div class="row button">
+          <input type="submit" value="Login">
+        </div>
+        <span style="color:red;"></span>
+        <div class="signup-link">Not a member? <a href="/register">Signup now</a></div>
+      </form>
+     </div>
+      
+   
     </div>
-</section>
+  </div>
 </body>
 </html>

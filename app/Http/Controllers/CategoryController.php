@@ -1,69 +1,66 @@
 <?php
 
-// app/Http/Controllers/CategoryController.php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Category;
+use App\Models\category;
+
 
 class CategoryController extends Controller
 {
-    public function create()
+    //
+    public function list_categories()
     {
-        return view('categories.create');
+        $categories = Category::latest()->paginate(1);
+        return view('category.category', compact('categories'));
     }
-
-    public function store(Request $request)
+    public function create_category(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
+
+      $check= new MyvalidateController($request);
+
+       $result= $check->myValidate([
+            'name' => 'required',
         ]);
+     
+        if($result !== 'secces'){
+           return  back()->withErrors($result); 
+           
+        }
+        $category = new Category();
+        $category->name = $request->name;
+        $category->save();
 
-        Category::create([
-            'name' => $request->input('name'),
-        ]);
-
-        return redirect()->route('category.create')->with('success', 'Category created successfully!');
+        return redirect('/showcategory')->with('success', 'Category created successfully');
     }
-    public function index()
-    {
-        $categories = Category::all();
-        return view('categories.index', compact('categories'));
-    }
 
-    public function edit($id)
-{
-    $category = Category::findOrFail($id);
-    return view('categories.edit', compact('category'));
-}
-
-public function update(Request $request, $id)
-{
-    $request->validate([
-        'name' => 'required|string|max:255',
-    ]);
-
-    $category = Category::findOrFail($id);
-    $category->update([
-        'name' => $request->input('name'),
-    ]);
-
-    return redirect()->route('category.index')->with('success', 'Category updated successfully!');
-}
-
-public function destroy($id)
+    public function delete_category($id)
     {
         $category = Category::find($id);
-
-        if (!$category) {
-            return redirect()->route('category.index')->with('error', 'Category not found!');
-        }
-
         $category->delete();
-
-        return redirect()->route('category.index')->with('success', 'Category deleted successfully!');
+        return redirect('/showcategory')->with('success', 'Category deleted successfully');
     }
-    
 
+    public function edit_category($id){
+        $category = category::find($id);
+      
+        return view('category.editcategory',compact('category'));
+    }
+    public function update_category(Request $request)
+    {
+                $check= new MyvalidateController($request);
+
+     $result=$check->myValidate([
+            'name' => 'required',
+        ]);
+        if($result !== 'secces'){
+    return  back()->withErrors($result); 
+    }
+
+        $category = Category::find($request->id);
+        $category->name = $request->name;
+        $category->update();
+
+        return redirect('/showcategory')->with('success', 'Category updated successfully');
+    }
 }

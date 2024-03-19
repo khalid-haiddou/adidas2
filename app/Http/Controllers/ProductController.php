@@ -1,96 +1,101 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\DB;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Category;
+use App\Models\category;
+use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function create()
-    {
-        $categories = Category::all();
-        return view('products.create', compact('categories'));
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
-            'images' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        $input = $request->all();
-
-
-    if ($request->hasFile('images')) {
-        $imageName = $request->file('images')->getClientOriginalName();
-        $request->file('images')->move(public_path('assets'), $imageName);
-        $input['images'] =  $imageName;
-    }
-
-        Product::create($input);
-
-        return redirect('products')->with('flash_message', 'Product added!');
-    }
-
-
-public function index()
-{
-    $products = Product::with('category')->get();
-    return view('products.index', compact('products'));
-}
-
-
-public function edit($id)
-    {
-        $product = Product::findOrFail($id);
-        $categories = Category::all();
-
-        return view('products.edit', compact('product', 'categories'));
-    }
-
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'price' => 'required|numeric',
-            'category_id' => 'required|exists:categories,id',
-            'images' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
-
-        $product = Product::findOrFail($id);
-
-        $input = $request->all();
-
-        
-        if ($request->hasFile('images')) {
-            $imageName = $request->file('images')->getClientOriginalName();
-            $request->file('images')->move(public_path('assets'), $imageName);
-            $input['images'] = $imageName;
-        }
-
-        $product->update($input);
-
-        return redirect('products')->with('flash_message', 'Product updated successfully!');
-    }
-
-    public function edite(Product $product)
-    {
+    //
+public function list_products(){
     $categories = Category::all();
-    return view('products.edit', compact('product', 'categories'));
-    }
-    
-    public function destroy(Product $product)
-    {
-    $product->delete();
+    $produits = DB::table('products')
+        ->select('products.*', 'categories.name as category_name')
+        ->join('categories', 'products.id_categorie', '=', 'categories.id')
+        ->paginate(2); // You can adjust the number of items per page as needed
+ 
+    return view('product.product', ['produits' => $produits, 'categories' => $categories]);
+}
 
-    return redirect('products')->with('flash_message', 'Product deleted!');
-}
+
+    public function add_product(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'prix' => 'required',
+            'quantity' => 'required',
+            'category_id' => 'required',
+            'tags' => 'required',
+            'image_path' => 'required|image|mimes:jpeg,png,jpg,svg,gif|max:2048',
+        ]);
+
+        $uploadDir = 'img/';
+        $uploadFileName = uniqid() . '.' . $request->file('image_path')->getClientOriginalExtension();
+        $request->file('image_path')->move($uploadDir, $uploadFileName);
+
+        $produit = new Product();
+        $produit->name = $request->name;
+        $produit->description = $request->description;
+        $produit->prix = $request->prix;
+        $produit->quantity = $request->quantity;
+        $produit->id_categorie = $request->category_id;
+        $produit->tags = $request->tags;
+        $produit->image_path = $uploadFileName; 
+        $produit->save();
+
+        return redirect('/products');
+    }
+
     
-}
+    public function edit_product($id){
+        $product = Product::find($id);
+        // dump($product);
+        // die();
+        $categories= Category::all();
+        return view('product.editproduct',compact('categories', 'product'));
+    }
+
+    public function update_product(Request $request){
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'prix' => 'required',
+            'quantity' => 'required',
+            'category_id' => 'required',
+            'tags' => 'required',
+            'image_path' => 'required|image|mimes:jpeg,png,jpg,svg,gif|max:2048',
+        ]);
+
+        $uploadDir = 'img/';
+        $uploadFileName = uniqid() . '.' . $request->file('image_path')->getClientOriginalExtension();
+        $request->file('image_path')->move($uploadDir, $uploadFileName);
+
+        $produit = Product::find($request->id);
+        $produit->name = $request->name;
+        $produit->description = $request->description;
+        $produit->prix = $request->prix;
+        $produit->quantity = $request->quantity;
+        $produit->id_categorie = $request->category_id;
+        $produit->tags = $request->tags;
+        $produit->image_path = $uploadFileName; 
+        $produit->update();
+
+        return redirect('/products');
+
+    }
+
+        public function delete_product($id){
+        $produit = Product::find($id);
+        $produit->delete();
+        return redirect('/products');
+
+    }
+
+ 
+
+    }
+
